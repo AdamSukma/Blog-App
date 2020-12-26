@@ -2,8 +2,6 @@ import 'package:blogapp/post.dart';
 import 'package:flutter/material.dart';
 import 'service.dart';
 
-
-
 class ViewPost extends StatefulWidget {
   @override
   _ViewPostState createState() => _ViewPostState();
@@ -11,23 +9,31 @@ class ViewPost extends StatefulWidget {
 
 class _ViewPostState extends State<ViewPost> {
   List<Post> _post;
-  String _namapenulis = '';
+  List<String> _namapenulis = [];
   @override
   void initState() {
     super.initState();
     Services.getPost().then((post) {
       setState(() {
         _post = post;
-        print(_post);
+        for (Post p in _post) {
+          Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
+            setState(() {
+              _namapenulis.add(namapenulis);
+            });
+          });
+        }
       });
     });
   }
 
-  _getNamaPenulis(String idpenulis){
-    Services.getNamaPenulis(idpenulis).then((namapenulis){
-      _namapenulis  = namapenulis;
-    });
-  }
+  // _getNamaPenulis(String idpenulis){
+  //   Services.getNamaPenulis(idpenulis).then((namapenulis){
+  //     setState(() {
+  //       _namapenulis = namapenulis;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +42,8 @@ class _ViewPostState extends State<ViewPost> {
           child: ListView.builder(
               itemCount: _post == null ? 0 : _post.length,
               itemBuilder: (BuildContext context, int index) {
-                _getNamaPenulis(_post[index].idpenulis);
-                return PreviewPost(_post[index],_namapenulis);
+                print("nama penulis $_namapenulis");
+                return PreviewPost(_post[index], _namapenulis[index]);
               })),
     );
   }
@@ -46,10 +52,9 @@ class _ViewPostState extends State<ViewPost> {
 class PreviewPost extends StatelessWidget {
   Post post;
   String namapenulis;
-  PreviewPost(this.post,this.namapenulis);
+  PreviewPost(this.post, this.namapenulis);
   @override
   Widget build(BuildContext context) {
-    print("nama ${namapenulis}");
     return new Container(
       padding: new EdgeInsets.all(10.0),
       child: new Card(
@@ -83,11 +88,13 @@ class PreviewPost extends StatelessWidget {
                         color: Colors.grey)),
                 new Padding(padding: new EdgeInsets.all(3.0)),
                 new Text(
-                    post.isipost,
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey),overflow: TextOverflow.ellipsis,),
+                  post.isipost,
+                  style: new TextStyle(
+                      fontSize: 12.0,
+                      fontFamily: "Delicious",
+                      color: Colors.grey),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 new Padding(padding: new EdgeInsets.all(5.0)),
               ],
             ),
