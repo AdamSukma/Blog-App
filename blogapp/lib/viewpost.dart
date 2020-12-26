@@ -1,7 +1,5 @@
 import 'package:blogapp/post.dart';
 import 'package:flutter/material.dart';
-import 'kategori.dart';
-import 'kategori.dart';
 import 'service.dart';
 import 'detail.dart';
 import 'kategori.dart';
@@ -12,7 +10,7 @@ class ViewPost extends StatefulWidget {
 }
 
 class _ViewPostState extends State<ViewPost> {
-  List<Post> _post;
+  List<Post> _post = [];
   int postCount;
   Map<String, String> _namapenulis = {};
   
@@ -57,7 +55,11 @@ class _ViewPostState extends State<ViewPost> {
 
   @override
   Widget build(BuildContext context) {
-    postCount = _post.length;
+    if(_post==null){
+      postCount = 0;
+    }else{
+      postCount = _post.length;
+    }
     print(postCount);
     return new Container(
       child: new Center(
@@ -115,49 +117,53 @@ class _ViewPostState extends State<ViewPost> {
 
 class PreviewPost extends StatelessWidget {
   Post post;
-  String namapenulis;
+  String namapenulis = '';
   PreviewPost(this.post, this.namapenulis);
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
-      child: new Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Detail(post)),
-              );
-            },
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                new Image.network(post.filegambar),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text(post.tglinsert,
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey)),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text(post.judul,
-                    style: new TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: "Delicious",
-                        color: Colors.black)),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text(namapenulis,
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey)),
-                new Padding(padding: new EdgeInsets.all(3.0)),
-                new Text(
-                  post.isipost,
+    var isipost = post.isipost;
+      if(namapenulis == null){
+        namapenulis = '';
+      }
+        return new Container(
+          padding: new EdgeInsets.all(10.0),
+          child: new Card(
+              shape:
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Detail(post)),
+                  );
+                },
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    new Image.network(post.filegambar),
+                    new Padding(padding: new EdgeInsets.all(5.0)),
+                    new Text(post.tglinsert,
+                        style: new TextStyle(
+                            fontSize: 12.0,
+                            fontFamily: "Delicious",
+                            color: Colors.grey)),
+                    new Padding(padding: new EdgeInsets.all(5.0)),
+                    new Text(post.judul,
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: "Delicious",
+                            color: Colors.black)),
+                    new Padding(padding: new EdgeInsets.all(5.0)),
+                    new Text(namapenulis,
+                        style: new TextStyle(
+                            fontSize: 12.0,
+                            fontFamily: "Delicious",
+                            color: Colors.grey)),
+                    new Padding(padding: new EdgeInsets.all(3.0)),
+                    new Text(
+                      isipost,
                   style: new TextStyle(
                       fontSize: 12.0,
                       fontFamily: "Delicious",

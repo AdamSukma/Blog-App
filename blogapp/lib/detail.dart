@@ -13,7 +13,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   Post post;
   List<Komentar> _komentar;
-  String namapenulis;
+  String namapenulis = '';
   int komentarCount;
   _DetailState(this.post);
   @override
@@ -34,8 +34,12 @@ class _DetailState extends State<Detail> {
 
   @override
   Widget build(BuildContext context) {
-    komentarCount = _komentar.length;
-    print(_komentar);
+    if(_komentar==null){
+      komentarCount = 0;
+    }else{
+      komentarCount = _komentar.length;
+    }
+    
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: new AppBar(
