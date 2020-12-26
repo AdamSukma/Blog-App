@@ -14,6 +14,7 @@ class _DetailState extends State<Detail> {
   Post post;
   List<Komentar> _komentar;
   String namapenulis;
+  int komentarCount;
   _DetailState(this.post);
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _DetailState extends State<Detail> {
 
   @override
   Widget build(BuildContext context) {
+    komentarCount = _komentar.length;
     print(_komentar);
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -92,12 +94,14 @@ class _DetailState extends State<Detail> {
                     fontFamily: "Delicious",
                     color: Colors.black)),
           ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: _komentar == null ? 0 : _komentar.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CardKomentar(_komentar[index]);
-              })
+          komentarCount > 0
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _komentar == null ? 0 : _komentar.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CardKomentar(_komentar[index]);
+                  })
+              : Center(child: Text('Tidak ada komentar')),
         ],
       ),
     );
@@ -111,24 +115,23 @@ class CardKomentar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-       Column(
-         crossAxisAlignment:CrossAxisAlignment.end,
-         children: [
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Text(komentar.tgl),
-           ),
-           ListTile(
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(komentar.tgl),
+          ),
+          ListTile(
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.person),
             ),
             title: Text(komentar.nama),
             subtitle: Text(komentar.isi),
-            
-      ),
-         ],
-       )
+          ),
+        ],
+      )
     ]));
   }
 }
