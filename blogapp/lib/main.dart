@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'kategori.dart';
-import 'search.dart';
 import 'viewpost.dart';
 
 void main() {

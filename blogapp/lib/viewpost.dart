@@ -80,10 +80,18 @@ class _ViewPostState extends State<ViewPost> {
                 value: selectedKategori,
                 items: generateItems(kategoris),
                 onChanged: (item) {
-                  setState(() {
-                    print(selectedKategori.name);
-                    selectedKategori = item;
-                  });
+                  Services.getPostByKategori(item.idkategori).then((post) {
+                setState(() {
+                  _post = post;
+                  for (Post p in _post) {
+                    Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
+                      setState(() {
+                        _namapenulis.addAll({p.idpost: namapenulis});
+                      });
+                    });
+                  }
+                });
+              });
                 },
               ),
           ListView.builder(
