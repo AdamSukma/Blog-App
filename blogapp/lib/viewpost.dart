@@ -13,11 +13,13 @@ class ViewPost extends StatefulWidget {
 
 class _ViewPostState extends State<ViewPost> {
   List<Post> _post;
+  int postCount;
   Map<String, String> _namapenulis = {};
-  Kategori selectedKategori;
+  
   List<Kategori> kategoris = [
     Kategori(name: 'Semua Kategori', idkategori: '0')
   ];
+  Kategori selectedKategori;
   List<DropdownMenuItem> generateItems(List<Kategori> kategoris) {
     List<DropdownMenuItem> items = [];
     for (var item in kategoris) {
@@ -47,12 +49,16 @@ class _ViewPostState extends State<ViewPost> {
     Services.getKategori().then((kategori) {
       setState(() {
         kategoris = kategoris + kategori;
+        selectedKategori = kategoris[0];
       });
     });
+    
   }
 
   @override
   Widget build(BuildContext context) {
+    postCount = _post.length;
+    print(postCount);
     return new Container(
       child: new Center(
           child: ListView(
@@ -76,7 +82,7 @@ class _ViewPostState extends State<ViewPost> {
             items: generateItems(kategoris),
             onChanged: (item) {
               selectedKategori = item;
-              if (item.idkategori == 0) {
+              if (item.idkategori == '0') {
                 Services.getPost().then((post) {
                   setState(() {
                     _post = post;
@@ -92,14 +98,15 @@ class _ViewPostState extends State<ViewPost> {
               }
             },
           ),
-          ListView.builder(
+          postCount > 0
+      ? ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
               itemCount: _post == null ? 0 : _post.length,
               itemBuilder: (BuildContext context, int index) {
                 return PreviewPost(
                     _post[index], _namapenulis[(_post[index].idpost)]);
-              }),
+              }):Center(child: Text('Tidak Ada Post'),),
         ],
       )),
     );
