@@ -15,7 +15,9 @@ class _ViewPostState extends State<ViewPost> {
   List<Post> _post;
   Map<String, String> _namapenulis = {};
   Kategori selectedKategori;
-  List<Kategori> kategoris = [Kategori(name: 'Semua Kategori',idkategori: '0')];
+  List<Kategori> kategoris = [
+    Kategori(name: 'Semua Kategori', idkategori: '0')
+  ];
   List<DropdownMenuItem> generateItems(List<Kategori> kategoris) {
     List<DropdownMenuItem> items = [];
     for (var item in kategoris) {
@@ -26,13 +28,13 @@ class _ViewPostState extends State<ViewPost> {
     }
     return items;
   }
+
   @override
   void initState() {
     super.initState();
     Services.getPost().then((post) {
       setState(() {
         _post = post;
-        // _namapenulis = new List(99);
         for (Post p in _post) {
           Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
             setState(() {
@@ -63,37 +65,33 @@ class _ViewPostState extends State<ViewPost> {
               Services.getPostByKeyword(str).then((post) {
                 setState(() {
                   _post = post;
-                  for (Post p in _post) {
-                    Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
-                      setState(() {
-                        _namapenulis.addAll({p.idpost: namapenulis});
-                      });
-                    });
-                  }
                 });
               });
             },
           ),
           DropdownButton(
-                isExpanded: true,
-                style: TextStyle(color: Colors.blueGrey),
-                value: selectedKategori,
-                items: generateItems(kategoris),
-                onChanged: (item) {
-                  Services.getPostByKategori(item.idkategori).then((post) {
-                setState(() {
-                  _post = post;
-                  for (Post p in _post) {
-                    Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
-                      setState(() {
-                        _namapenulis.addAll({p.idpost: namapenulis});
-                      });
-                    });
-                  }
+            isExpanded: true,
+            style: TextStyle(color: Colors.blueGrey),
+            value: selectedKategori,
+            items: generateItems(kategoris),
+            onChanged: (item) {
+              selectedKategori = item;
+              if (item.idkategori == 0) {
+                Services.getPost().then((post) {
+                  setState(() {
+                    _post = post;
+                  });
                 });
-              });
-                },
-              ),
+              } else {
+                Services.getPostByKategori(item.idkategori).then((post) {
+                  setState(() {
+                    _post = post;
+                    print(post);
+                  });
+                });
+              }
+            },
+          ),
           ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
@@ -107,8 +105,6 @@ class _ViewPostState extends State<ViewPost> {
     );
   }
 }
-
-
 
 class PreviewPost extends StatelessWidget {
   Post post;

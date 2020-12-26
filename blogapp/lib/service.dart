@@ -67,10 +67,10 @@ class Services {
   static Future<List<Post>> getPostByKategori(String idkategori) async {
     try {
       var map = Map<String, dynamic>();
-      map['action'] = 'GET_POST_KEYWORD';
+      map['action'] = 'GET_POST_KATEGORI';
       map['idkategori'] = idkategori;
       final response = await http.post(ROOT, body: map);
-      print('getpost Response: ${response.body}');
+      print('getpostkategori Response: ${response.body}');
       if (200 == response.statusCode) {
         List<Post> list = parseResponse(response.body);
         return list;
