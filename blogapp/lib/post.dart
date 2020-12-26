@@ -1,67 +1,26 @@
-import 'package:flutter/material.dart';
+class Post {
+  String idpost;
+  String judul;
+  String idkategori;
+  String isipost;
+  String filegambar;
+  String tglinsert;
+  String tglupdate;
+  String idpenulis;
 
-class Post extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      child: new Center(
-        child: new Column(
-          children: <Widget>[
-            new Cards(),
-            new Cards(),
-            new Cards(),
-          ],
-        ),
-      ),
-    );
-  }
-}
+  Post({this.idpost,this.judul,this.idkategori,this.isipost,this.filegambar,this.tglinsert,this.tglupdate,
+  this.idpenulis});
 
-class Cards extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
-      child: new Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            onPressed: () {},
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                new Image.asset("img/bromo.jpg"),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text("Sample Tanggal",
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey)),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text("Sample Judul",
-                    style: new TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: "Delicious",
-                        color: Colors.black)),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-                new Text("Sample Penulis",
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey)),
-                new Padding(padding: new EdgeInsets.all(3.0)),
-                new Text(
-                    "Sample Post Sample Post Sample Post Sample Post Sample Post Sample Post Sample Post",
-                    style: new TextStyle(
-                        fontSize: 12.0,
-                        fontFamily: "Delicious",
-                        color: Colors.grey)),
-                new Padding(padding: new EdgeInsets.all(5.0)),
-              ],
-            ),
-          )),
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      idpost: json['idpost'] as String,
+      judul: json['judul'] as String,
+      idkategori: json['idkategori'] as String,
+      isipost: json['isi_post'] as String,
+      filegambar: json['file_gambar'] as String,
+      tglinsert: json['tgl_insert'] as String,
+      tglupdate: json['tgl_update'] as String,
+      idpenulis: json['id_penulis'] as String
     );
   }
 }

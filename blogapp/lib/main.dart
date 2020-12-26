@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './post.dart' as post;
+import 'viewpost.dart';
 
 void main() {
   runApp(new MaterialApp(
@@ -54,9 +54,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: new TabBarView(
         controller: controller,
         children: <Widget>[
-          new post.Post(),
-          new post.Post(),
-          new post.Post(),
+          ViewPost(),
+          ViewPost(),
+          ViewPost(),
         ],
       ),
     );
