@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'kategori.dart';
+import 'search.dart';
 import 'viewpost.dart';
 
 void main() {
@@ -55,8 +57,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         controller: controller,
         children: <Widget>[
           ViewPost(),
-          ViewPost(),
-          ViewPost(),
+          Kategori(),
+          Search(),
         ],
       ),
     );
