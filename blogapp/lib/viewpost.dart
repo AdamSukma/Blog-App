@@ -1,7 +1,10 @@
 import 'package:blogapp/post.dart';
 import 'package:flutter/material.dart';
+import 'kategori.dart';
+import 'kategori.dart';
 import 'service.dart';
 import 'detail.dart';
+import 'kategori.dart';
 
 class ViewPost extends StatefulWidget {
   @override
@@ -10,47 +13,94 @@ class ViewPost extends StatefulWidget {
 
 class _ViewPostState extends State<ViewPost> {
   List<Post> _post;
-  List<String> _namapenulis = [];
+  Map<String, String> _namapenulis = {};
+  Kategori selectedKategori;
+  List<Kategori> kategoris = [Kategori(name: 'Semua Kategori',idkategori: '0')];
+  List<DropdownMenuItem> generateItems(List<Kategori> kategoris) {
+    List<DropdownMenuItem> items = [];
+    for (var item in kategoris) {
+      items.add(DropdownMenuItem(
+        child: Text(item.name),
+        value: item,
+      ));
+    }
+    return items;
+  }
   @override
   void initState() {
     super.initState();
     Services.getPost().then((post) {
       setState(() {
         _post = post;
-        _namapenulis = new List(99);
+        // _namapenulis = new List(99);
         for (Post p in _post) {
           Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
             setState(() {
-              _namapenulis[int.parse(p.idpost)] = (namapenulis);
+              _namapenulis.addAll({p.idpost: namapenulis});
             });
           });
         }
       });
     });
+    Services.getKategori().then((kategori) {
+      setState(() {
+        kategoris = kategoris + kategori;
+      });
+    });
   }
-
-  // _getNamaPenulis(String idpenulis){
-  //   Services.getNamaPenulis(idpenulis).then((namapenulis){
-  //     setState(() {
-  //       _namapenulis = namapenulis;
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     return new Container(
       child: new Center(
-          child: ListView.builder(
+          child: ListView(
+        children: [
+          TextField(
+            decoration: new InputDecoration(
+              hintText: "Search",
+            ),
+            onSubmitted: (String str) {
+              Services.getPostByKeyword(str).then((post) {
+                setState(() {
+                  _post = post;
+                  for (Post p in _post) {
+                    Services.getNamaPenulis(p.idpenulis).then((namapenulis) {
+                      setState(() {
+                        _namapenulis.addAll({p.idpost: namapenulis});
+                      });
+                    });
+                  }
+                });
+              });
+            },
+          ),
+          DropdownButton(
+                isExpanded: true,
+                style: TextStyle(color: Colors.blueGrey),
+                value: selectedKategori,
+                items: generateItems(kategoris),
+                onChanged: (item) {
+                  setState(() {
+                    print(selectedKategori.name);
+                    selectedKategori = item;
+                  });
+                },
+              ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
               itemCount: _post == null ? 0 : _post.length,
               itemBuilder: (BuildContext context, int index) {
-                // print("nama penulis $_namapenulis");
                 return PreviewPost(
-                    _post[index], _namapenulis[int.parse(_post[index].idpost)]);
-              })),
+                    _post[index], _namapenulis[(_post[index].idpost)]);
+              }),
+        ],
+      )),
     );
   }
 }
+
+
 
 class PreviewPost extends StatelessWidget {
   Post post;
@@ -69,18 +119,7 @@ class PreviewPost extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => Detail(
-                          judul: "Post 1",
-                          penulis: "Mr A",
-                          tanggal: "20 Desember 2020",
-                          gambar: "img/bromo.jpg",
-                          isi:
-                              "Variabel dummy adalah variabel yang digunakan untuk mengkuantitatifkan variabel yang bersifat kualitatif (misal: jenis kelamin, ras, agama, perubahan kebijakan pemerintah, perbedaan situasi dan lain-lain).",
-                          penuliskomentar: "bambang",
-                          tglkomentar: "24 Desember 2020",
-                          isikomentar: "bagus sekalii",
-                        )),
+                MaterialPageRoute(builder: (context) => Detail(post)),
               );
             },
             child: new Column(

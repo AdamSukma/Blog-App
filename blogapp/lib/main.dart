@@ -32,35 +32,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.grey[100],
       appBar: new AppBar(
         title: new Center(
           child: Text('UAS PBP Kelompok 7'),
         ),
         backgroundColor: Colors.teal[300],
-        bottom: new TabBar(
-          controller: controller,
-          tabs: <Widget>[
-            new Tab(
-              icon: new Text("Post"),
-            ),
-            new Tab(
-              icon: new Text("Kategori"),
-            ),
-            new Tab(
-              icon: new Text("Search"),
-            ),
-          ],
-        ),
       ),
-      body: new TabBarView(
-        controller: controller,
-        children: <Widget>[
-          ViewPost(),
-          Kategori(),
-          Search(),
-        ],
-      ),
+      body: ViewPost()
     );
   }
 }
