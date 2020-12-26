@@ -5,7 +5,7 @@ import 'kategori.dart';
 import 'post.dart';
 import 'komentar.dart';
 class Services {
-  static const ROOT = 'http://192.168.0.132//kuliah/WebDinamis/function/services.php'; 
+  static const ROOT = 'https://pbpuas.000webhostapp.com/function/services.php'; 
 
 
   static Future<List<Post>> getPost() async {
